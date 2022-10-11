@@ -1,11 +1,5 @@
 #yahoo.py
 
-'''
-Plan is to have it run and then once ready I end script then manually upload to S3 with another script
-
-
-'''
-
 from bs4 import BeautifulSoup
 import subprocess
 #import pyautogui
@@ -145,14 +139,19 @@ def scrapePage(city, site, page, notFinished=True, iteration=1, count=0):
 						print("")
 						print('Data cannot be found... continuing. Empty Count: ' + str(emptyCount))
 						print("___________________")
-						continue
+
+						emptyCount += 1
+						if emptyCount > 2:
+							print("EMPTY COUNT HAS MET THREASHOLD")
+							break
+						else:
+							continue
 				else:
 					print("")
 					print('Data cannot be found... continuing. Empty Count: ' + str(emptyCount))
 					print("___________________")
 					continue
-			if emptyCount > 2:
-				break
+
 
 
 			print("")
