@@ -26,10 +26,14 @@ minSleep = 7
 maxSleep = 7
 
 '''
-python3 yahoo_multiple.py yahoo_mul_1.csv house+plaster 'New York'
-python3 yahoo_multiple.py yahoo_mul_2.csv house+decks 'New York'
-python3 yahoo_multiple.py yahoo_mul_3.csv concrete 'Fremont'
-python3 yahoo_multiple.py yahoo_mul_4.csv house+abatement 'Janesville'
+
+
+FOR SINGLE (does not increment)
+python3 yahoo_aws.py yahoo_aws_4.csv 'Muncie' cabinet
+
+
+FOR MULTIPLE
+python3 yahoo_aws.py yahoo_aws_1.csv 'New York'
 
 From Painting - garage door
 
@@ -46,7 +50,7 @@ listOfCities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Philadelphia',
 
 
 #get rid of already scraped lists
-startScrapeAt = sys.argv[3]
+startScrapeAt = sys.argv[2]
 newList = []
 boolean = False
 for i in range(len(listOfCities)):
@@ -69,7 +73,7 @@ page = browser.new_page()
 
 
 #scraping part
-def scrapePage(city, site, page, notFinished=True, iteration=1, count=0):
+def scrapePage(city, site, page, typeOfContractor, notFinished=True, iteration=1, count=0):
 
 	while notFinished:
 		try:
@@ -199,7 +203,7 @@ def scrapePage(city, site, page, notFinished=True, iteration=1, count=0):
 		print(site)
 		lenBigDF = len(bigDF)
 		print("Length of Big Dataframe is: " + str(lenBigDF))
-		print(str(fileName) + ". C Type: " + str(sys.argv[2]) + ". City Start: " + str(sys.argv[3]))
+		print(str(fileName) + ". C Type: " + str(typeOfContractor) + ". City Start: " + str(sys.argv[2]))
 		print('NEW CITY: ' + str(city))
 		print("_______________________________")
 		print("")
@@ -229,63 +233,100 @@ def scrapePage(city, site, page, notFinished=True, iteration=1, count=0):
 
 
 #site = 'https://www.google.com/search?rlz=1C5CHFA_enUS772US775&tbs=lf:1,lf_ui:14&tbm=lcl&sxsrf=ALiCzsZf2fqGz4Xp4woZ19cHMtKEpZFc2Q:1654541970866&q=landscape+new+york+contractors&rflfq=1&num=10&sa=X&ved=2ahUKEwiB2sGTwZn4AhXaj4kEHQRaBd8QjGp6BAgCEE8&biw=1348&bih=704&dpr=2#rlfi=hd:;si:13207495435885287728,a;mv:[[40.924668499999996,-73.8808562],[40.6410396,-74.021506]]'
-cityCount = 1
+def doALL(typeOfContractor, page):
+	cityCount = 1
+	for i in range(len(listOfCities)):
 
-for i in range(len(listOfCities)):
+		nextCity = listOfCities[i]
+		citySplit = nextCity.split(' ')
+		if len(citySplit) > 1:
+			city = citySplit[0] + '+'  + citySplit[1]
+		else:
+			city = citySplit[0]
+		site = 'https://search.yahoo.com/local/s;_ylt=AwrJ61hPpq9iYz0AgzrumYlQ;_ylu=Y29sbwNiZjEEcG9zAzEEdnRpZAMEc2VjA3BhZ2luYXRpb24-?p=' + typeOfContractor + '+contractors+' + city + '&pz=15&fr=yfp-t&b=1&pz=15&xargs=0'
 
-	nextCity = listOfCities[i]
-	citySplit = nextCity.split(' ')
-	if len(citySplit) > 1:
-		city = citySplit[0] + '+'  + citySplit[1]
-	else:
-		city = citySplit[0]
-	#so far have done deck, window, cleaning+service, painting, fence tree+service, concrete, insulation, avac, roofing, lawn+care,
-	#waste+material+remover, doors, landscaping,welder, pest+control,appliances, cabinet, moving, paving, solar, tile, cleaniing serviecs, roofing & gutters
-	typeOfContractor = sys.argv[2]
-	site = 'https://search.yahoo.com/local/s;_ylt=AwrJ61hPpq9iYz0AgzrumYlQ;_ylu=Y29sbwNiZjEEcG9zAzEEdnRpZAMEc2VjA3BhZ2luYXRpb24-?p=' + typeOfContractor + '+contractors+' + city + '&pz=15&fr=yfp-t&b=1&pz=15&xargs=0'
-
-	print('')
-	print("####################################")
-	print("####################################")
-	print("#########  Now doing city: " + nextCity)
-	print("#########  City count is: " + str(cityCount))
-	print("####################################")
-	print("####################################")
-	print('')
-	try:
-		page.goto(site)
-	except:
+		print('')
+		print("####################################")
+		print("####################################")
+		print("#########  Now doing city: " + nextCity)
+		print("#########  City count is: " + str(cityCount))
+		print("####################################")
+		print("####################################")
+		print('')
 		try:
-			print('CONNECTION ERROR')
-			time.sleep(60)
 			page.goto(site)
 		except:
 			try:
-				print('CONNECTION ERROR - 2')
-				time.sleep(120)
+				print('CONNECTION ERROR')
+				time.sleep(60)
 				page.goto(site)
 			except:
 				try:
-					print('CONNECTION ERROR - 3')
-					time.sleep(100)
-					page.reload()
-					time.sleep(100)
+					print('CONNECTION ERROR - 2')
+					time.sleep(120)
 					page.goto(site)
 				except:
-					print('CONNECTION ERROR - 4')
-					time.sleep(20)
-					page.close()
-					time.sleep(20)
-					page = browser.new_page()
-					time.sleep(20)
-					page.goto(site)
+					try:
+						print('CONNECTION ERROR - 3')
+						time.sleep(100)
+						page.reload()
+						time.sleep(100)
+						page.goto(site)
+					except:
+						print('CONNECTION ERROR - 4')
+						time.sleep(20)
+						page.close()
+						time.sleep(20)
+						page = browser.new_page()
+						time.sleep(20)
+						page.goto(site)
 
-	time.sleep(2)
-	scrapePage(nextCity, site, page)
-	cityCount += 1
+		time.sleep(2)
+		scrapePage(nextCity, site, page, typeOfContractor)
+		cityCount += 1
 
-print("")
-print("SCRAPING IS COMPLETE FOR YAHOO")
+try:
+	contractType = sys.argv[3]
+	print("")
+	print("Independant single run")
+	print(contractType)
+	print("")
+except IndexError:
+	print("RUNNING MULTIPLE")
+	#get the right contract type from JSON file
+	for i in range(55):
+		f = open('contract_list_yahoo.json')
+		data = json.load(f)
+		index = data["index"]
+		print('On index: ' + str(index))
+		contractType = data["contractorList"][index]
+		print('Contract Type: ' + str(contractType))
+
+		#increment index
+		index += 1
+		data["index"] = index
+		with open('contract_list_yahoo.json', 'w') as f2:
+			json.dump(data, f2, indent=4)
+		time.sleep(8)
+
+		doALL(contractType, page) #ACTUAL FUNCTION THAT SCRAPES HERE
+		print("")
+		print("ALL DONE WITH: " + str(contractType))
+		print("INDEX: " + str(index))
+		print("LOOP # " + str(i+1))
+		print("~~~~~~~~~~~~~~~~~~~~~~~~~~")
+		print("")
+		time.sleep(5)
+
+	print("")
+	print("SCRAPING IS COMPLETE FOR YAHOO - MULTIPLE")
+	print("")
+
+
+#for single runs only
+doALL(contractType, page)
+
+print("SCRAPING IS COMPLETE FOR YAHOO - Single")
 print("")
 
 

@@ -271,17 +271,12 @@ except IndexError:
 		contractType = data["contractorList"][index]
 		print('Contract Type: ' + str(contractType))
 
-
-
 		#increment index
 		index += 1
 		data["index"] = index
 		with open('contract_list_bing.json', 'w') as f2:
 			json.dump(data, f2, indent=4)
 		time.sleep(8)
-
-
-
 
 		doALL(contractType, page) #ACTUAL FUNCTION THAT SCRAPES HERE
 		print("")
