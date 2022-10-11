@@ -21,6 +21,8 @@ import time
 from random import randint
 from playwright.sync_api import sync_playwright, TimeoutError
 import sys
+import collections
+collections.Callable = collections.abc.Callable
 
 minSleep = 7
 maxSleep = 7
