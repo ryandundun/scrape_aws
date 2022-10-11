@@ -259,6 +259,7 @@ try:
 	print(contractType)
 	print("")
 except IndexError:
+	print("RUNNING MULTIPLE")
 	#get the right contract type from JSON file
 	for i in range(55):
 		f = open('contract_list_bing.json')
