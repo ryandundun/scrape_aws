@@ -28,17 +28,17 @@ maxSleep = 7
 
 '''
 FOR SINGLE (does not increment)
-python3 bing_multiple.py bing_mul_4.csv 'Muncie' cabinet
+python3 bing_aws.py bing_aws_4.csv 'Muncie' cabinet
 
 
 FOR MULTIPLE
-python3 bing_multiple.py bing_mul_1.csv 'New York'
+python3 bing_aws.py bing_aws_1.csv 'New York'
 
 Outstanding:
-python3 bing_multiple.py bing_mul_1.csv 'San Bruno' locksmith
-python3 bing_multiple.py bing_mul_2.csv 'Oro Valley' house+insulation
-python3 bing_multiple.py bing_mul_3.csv 'Malden' house+moving
-python3 bing_multiple.py bing_mul_4.csv 'New York' carpenter
+python3 bing_aws.py bing_aws_1.csv 'San Bruno' locksmith
+python3 bing_aws.py bing_aws_2.csv 'Oro Valley' house+insulation
+python3 bing_aws.py bing_aws_3.csv 'Malden' house+moving
+python3 bing_aws.py bing_aws_4.csv 'New York' carpenter
 Multiple one
 
 '''
