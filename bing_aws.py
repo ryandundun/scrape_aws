@@ -77,17 +77,20 @@ def scrapePage(city, site, page, typeOfContractor, notFinished=True, iteration=1
 		except:
 			try:
 				print("CONNECTION ISSUE")
+				logging.info("CONNECTION ISSUE")
 				time.sleep(10)
 				html = page.content()
 			except:
 				try:
 					print("CONNECTION ISSUE - 2")
+					logging.info("CONNECTION ISSUE - 2")
 					time.sleep(10)
 					page.goto(site)
 					time.sleep(5)
 					html = page.content()
 				except:
 					print("CONNECTION ISSUE - 3")
+					logging.info("CONNECTION ISSUE - 3")
 					page.close()
 					time.sleep(5)
 					page = browser.new_page()
@@ -116,6 +119,9 @@ def scrapePage(city, site, page, typeOfContractor, notFinished=True, iteration=1
 				print("")
 				print('URL cannot be found... continuing')
 				print("___________________")
+				logging.info("")
+				logging.info('URL cannot be found... continuing')
+				logging.info("___________________")
 				continue
 				
 			print("")
@@ -123,6 +129,11 @@ def scrapePage(city, site, page, typeOfContractor, notFinished=True, iteration=1
 			print(URL)
 			print(phoneNumber)
 			print("___________________")
+			logging.info("")
+			logging.info(compName)
+			logging.info(URL)
+			logging.info(phoneNumber)
+			logging.info("___________________")
 			listOfURLS.append(URL)
 			listOfNames.append(compName)
 			listOfPhoneNumbers.append(phoneNumber)
@@ -140,16 +151,26 @@ def scrapePage(city, site, page, typeOfContractor, notFinished=True, iteration=1
 				print('')
 				print('the file already exists and is length:')
 				print(len(bigDF))
+				logging.info('')
+				logging.info('the file already exists and is length:')
+				logging.info(len(bigDF))
 				bigDF = bigDF.append(df, sort=False)
 			except:
 				bigDF = df
 				print('')
 				print("File does not already exist - first round, set the bigDF variable")
+				logging.info('')
+				logging.info("File does not already exist - first round, set the bigDF variable")
 		else:
 			print('')
+			logging.info('')
 			print('Length before: ' + str(len(bigDF)))
+			logging.info('Length before: ' + str(len(bigDF)))
 			bigDF = bigDF.append(df, sort=False)
 			print('Length after: ' + str(len(bigDF)))
+			logging.info('Length after: ' + str(len(bigDF)))
+
+
 
 
 		#writing to the CSV
@@ -158,12 +179,21 @@ def scrapePage(city, site, page, typeOfContractor, notFinished=True, iteration=1
 		print("Iteration: " + str(iteration) + " complete. Count = " + str(count) + ". City: " + city)
 		print('URL was ')
 		print(site)
+		logging.info("Written BIG file")
+		logging.info("Iteration: " + str(iteration) + " complete. Count = " + str(count) + ". City: " + city)
+		logging.info('URL was ')
+		logging.info(site)
 		lenBigDF = len(bigDF)
 		print("Length of Big Dataframe is: " + str(lenBigDF))
 		print(str(fileName) + ". C Type: " + str(typeOfContractor) + ". City Start: " + str(sys.argv[2]))
 		print('NEW CITY: ' + str(city))
 		print("_______________________________")
 		print("")
+		logging.info("Length of Big Dataframe is: " + str(lenBigDF))
+		logging.info(str(fileName) + ". C Type: " + str(typeOfContractor) + ". City Start: " + str(sys.argv[2]))
+		logging.info('NEW CITY: ' + str(city))
+		logging.info("_______________________________")
+		logging.info("")
 		count += 10
 		iteration += 1
 		
@@ -177,13 +207,17 @@ def scrapePage(city, site, page, typeOfContractor, notFinished=True, iteration=1
 			print("")
 			print("MOVING ON TO NEXT CITY")
 			print("")
+			logging.info("")
+			logging.info("MOVING ON TO NEXT CITY")
+			logging.info("")
 			notFinished = False
 			continue
 		time.sleep(randint(minSleep, maxSleep))
 
 
 		if iteration > 30:
-			print('On iteration 35, moving on...')
+			print('On iteration 30, moving on...')
+			logging.info('On iteration 30, moving on...')
 			return None
 
 
@@ -211,29 +245,44 @@ def doALL(typeOfContractor, page):
 		print("####################################")
 		print("####################################")
 		print('')
+
+		logging.info('')
+		logging.info("####################################")
+		logging.info("####################################")
+		logging.info("#########  Now doing city: " + nextCity)
+		logging.info("#########  City count is: " + str(cityCount))
+		logging.info("####################################")
+		logging.info("####################################")
+		logging.info('')
 		try:
 			print('site is')
 			print(site)
+			logging.info('site is')
+			logging.info(site)
 			page.goto(site)
 		except:
 			try:
 				print('CONNECTION ERROR')
+				logging.info('CONNECTION ERROR')
 				time.sleep(60)
 				page.goto(site)
 			except:
 				try:
 					print('CONNECTION ERROR - 2')
+					logging.info('CONNECTION ERROR - 2')
 					time.sleep(120)
 					page.goto(site)
 				except:
 					try:
 						print('CONNECTION ERROR - 3')
+						logging.info('CONNECTION ERROR - 3')
 						time.sleep(100)
 						page.reload()
 						time.sleep(100)
 						page.goto(site)
 					except:
 						print('CONNECTION ERROR - 4')
+						logging.info('CONNECTION ERROR - 4')
 						time.sleep(20)
 						page.close()
 						time.sleep(20)
@@ -253,53 +302,77 @@ def doALL(typeOfContractor, page):
 #carpet+fabric+cleaning, landscaping, concrete, waste+material+removal, roofing+gutters, 
 
 
+def everything():
+	try:
+		contractType = sys.argv[3]
+		print("")
+		print("Independant single run")
+		print(contractType)
+		print("")
+		logging.info("")
+		logging.info("Independant single run")
+		logging.info(contractType)
+		logging.info("")
+	except IndexError:
+		print("RUNNING MULTIPLE")
+		logging.info("RUNNING MULTIPLE")
+		#get the right contract type from JSON file
+		for i in range(55):
+			f = open('contract_list_bing.json')
+			data = json.load(f)
+			index = data["index"]
+			print('On index: ' + str(index))
+			logging.info('On index: ' + str(index))
+			contractType = data["contractorList"][index]
+			print('Contract Type: ' + str(contractType))
+			logging.info('Contract Type: ' + str(contractType))
+
+			#increment index
+			index += 1
+			data["index"] = index
+			with open('contract_list_bing.json', 'w') as f2:
+				json.dump(data, f2, indent=4)
+			time.sleep(8)
+
+			doALL(contractType, page) #ACTUAL FUNCTION THAT SCRAPES HERE
+			print("")
+			print("ALL DONE WITH: " + str(contractType))
+			print("INDEX: " + str(index))
+			print("LOOP # " + str(i+1))
+			print("~~~~~~~~~~~~~~~~~~~~~~~~~~")
+			print("")
+			logging.info("")
+			logging.info("ALL DONE WITH: " + str(contractType))
+			logging.info("INDEX: " + str(index))
+			logging.info("LOOP # " + str(i+1))
+			logging.info("~~~~~~~~~~~~~~~~~~~~~~~~~~")
+			logging.info("")
+			time.sleep(5)
+
+		print("")
+		print("SCRAPING IS COMPLETE FOR BING - MULTIPLE")
+		print("")
+		logging.info("")
+		logging.info("SCRAPING IS COMPLETE FOR BING - MULTIPLE")
+		logging.info("")
+		quit()
+
+
+	#for single runs only
+	doALL(contractType, page)
+
+	print("SCRAPING IS COMPLETE FOR BING - Single")
+	print("")
+	logging.info("SCRAPING IS COMPLETE FOR BING - Single")
+	logging.info("")
+	
+
 
 try:
-	contractType = sys.argv[3]
-	print("")
-	print("Independant single run")
-	print(contractType)
-	print("")
-except IndexError:
-	print("RUNNING MULTIPLE")
-	#get the right contract type from JSON file
-	for i in range(55):
-		f = open('contract_list_bing.json')
-		data = json.load(f)
-		index = data["index"]
-		print('On index: ' + str(index))
-		contractType = data["contractorList"][index]
-		print('Contract Type: ' + str(contractType))
-
-		#increment index
-		index += 1
-		data["index"] = index
-		with open('contract_list_bing.json', 'w') as f2:
-			json.dump(data, f2, indent=4)
-		time.sleep(8)
-
-		doALL(contractType, page) #ACTUAL FUNCTION THAT SCRAPES HERE
-		print("")
-		print("ALL DONE WITH: " + str(contractType))
-		print("INDEX: " + str(index))
-		print("LOOP # " + str(i+1))
-		print("~~~~~~~~~~~~~~~~~~~~~~~~~~")
-		print("")
-		time.sleep(5)
-
-	print("")
-	print("SCRAPING IS COMPLETE FOR BING - MULTIPLE")
-	print("")
-
-
-#for single runs only
-doALL(contractType, page)
-
-print("SCRAPING IS COMPLETE FOR BING - Single")
-print("")
-
-
-
+	everything()
+except:
+	logging.exception("message")
+	logging.info("FAILED RYAN")
 
 '''
 from playwright.sync_api import sync_playwright, TimeoutError
